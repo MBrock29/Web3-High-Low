@@ -65,4 +65,4 @@ export const abi = [
   },
 ];
 export const randomiser_CONTRACT_ADDRESS =
-  "0x6D8389aa4733125939495f66311141E2880B910A";
+  "0x5FbDB2315678afecb367f032d93F642f64180aa3";

@@ -26,7 +26,7 @@ function App() {
     // setUserBalance(balanceInEth);
 
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 3) {
+    if (chainId !== 31337) {
       console.log("please change network");
     }
 
@@ -74,9 +74,8 @@ function App() {
         abi,
         provider
       );
-      setRandomNumber(
-        ethers.utils.formatUnits(await randomiserContract.getRandomNumber(), 0)
-      );
+      const rand = await randomiserContract.getRandomNumber();
+      setRandomNumber(ethers.utils.formatUnits(rand, 0));
     } catch (err) {
       console.error(err);
     }
@@ -95,10 +94,12 @@ function App() {
       await transaction.wait();
       setResultIn(true);
       await getRandomNumber();
+      console.log(randomNumber);
+      console.log(outcome);
       if (randomNumber < 51) {
-        setOutcome("Loss");
+        setOutcome(false);
       } else {
-        setOutcome("Won");
+        setOutcome(true);
       }
       await getBalance();
     } catch (err) {
@@ -121,9 +122,9 @@ function App() {
       setResultIn(true);
       await getRandomNumber();
       if (randomNumber < 51) {
-        setOutcome("Won");
+        setOutcome(true);
       } else {
-        setOutcome("Loss");
+        setOutcome(false);
       }
       await getBalance();
     } catch (err) {
@@ -187,7 +188,6 @@ function App() {
         </div>
       </div>
     );
-  console.log(betAmount);
   return (
     <div className={s.app}>
       <div className={s.header}>
@@ -228,10 +228,8 @@ function App() {
             Result is... <br />
             <span style={{ fontSize: 72 }}>{randomNumber}</span>
           </h1>
-          <br />
-          <h1>
-            {outcome === "Won" ? "Congrats, you won!" : "Sorry, you lost"}
-          </h1>
+          {/* <br />
+          <h1>{outcome ? "Congrats, you won!" : "Sorry, you lost"}</h1> */}
         </div>
       )}
     </div>
