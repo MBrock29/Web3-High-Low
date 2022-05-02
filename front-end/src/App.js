@@ -21,7 +21,7 @@ function App() {
     const web3Provider = new ethers.providers.Web3Provider(provider);
     const signer = web3Provider.getSigner();
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 3) {
+    if (chainId !== 4) {
       console.log("please change network");
     }
 
@@ -198,7 +198,7 @@ function App() {
   useEffect(() => {
     if (!walletConnected) {
       web3ModalRef.current = new Web3Modal({
-        network: "ropsten",
+        network: "rinkeby",
         providerOptions: {},
         disableInjectedProvider: false,
       });
