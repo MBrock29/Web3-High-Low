@@ -4,10 +4,15 @@
 .app {
   height: 100vh;
   display: flex;
-  margin-top: $space-huge;
+  margin-top: $space-large;
   align-items: center;
   flex-direction: column;
   text-align: center;
+}
+
+h3,
+p {
+  font-weight: 300;
 }
 
 .button {
@@ -62,24 +67,19 @@
   border: none;
   margin: $x1;
   text-align: center;
+  padding: 0;
 }
 
 .buttonsContainer {
   display: flex;
+  margin-top: $space-normal;
+  justify-content: center;
 }
 
-.cashier {
-  display: flex;
-  margin-top: 50px;
-  .button {
-    height: 30px;
-    width: 150px;
-  }
-}
-
-.cashierContainer {
-  display: flex;
-  flex-direction: column;
+.background {
+  background-color: $dark;
+  padding: 10px 20px;
+  margin-bottom: $space-large;
 }
 
 .spinner {

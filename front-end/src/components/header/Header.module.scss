@@ -1,0 +1,72 @@
+@import "../../styles/colors";
+@import "../../styles/variables";
+
+.button {
+  background-color: $green;
+  border-radius: $x1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 200px;
+  margin: $x1;
+  border: 2px solid $green;
+  cursor: pointer;
+  font-size: 18px;
+  color: $dark;
+  &:hover {
+    opacity: 0.6;
+  }
+  &:disabled {
+    opacity: 0.3;
+  }
+
+  @media (max-width: $tablet) {
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
+.cashier {
+  display: flex;
+  .button {
+    height: 30px;
+    width: 150px;
+  }
+}
+
+.cashierContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: $space-huge;
+  width: 750px;
+  justify-content: space-evenly;
+}
+
+.balance {
+  background-color: $dark;
+  border-radius: $space-huge;
+  padding: 10px 20px;
+
+  p {
+    margin: 0;
+    color: $red;
+    font-weight: 400;
+    font-size: 18px;
+  }
+}
+
+.cashierButton {
+  margin: 0;
+  color: $green;
+  text-decoration: underline;
+  font-weight: 400;
+  font-size: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.3;
+  }
+}
