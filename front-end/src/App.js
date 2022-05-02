@@ -21,7 +21,7 @@ function App() {
     const web3Provider = new ethers.providers.Web3Provider(provider);
     const signer = web3Provider.getSigner();
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337) {
+    if (chainId !== 3) {
       console.log("please change network");
     }
 
