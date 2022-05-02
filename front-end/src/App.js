@@ -266,7 +266,6 @@ function App() {
           <button className={s.button} onClick={withdraw}>
             Withdraw
           </button>
-          <button onClick={() => getBalance(account)}>Refresh balance</button>
         </div>
         <p>Deposit costs 0.1 ETH for 100 chips</p>
       </div>
