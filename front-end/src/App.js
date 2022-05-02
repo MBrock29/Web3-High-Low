@@ -217,14 +217,7 @@ function App() {
             Double your stake if you win!
           </h3>
         </div>
-        <div className={s.balanceContainer}></div>
         <div className={s.buttonsContainer}>
-          <button className={s.button} onClick={betLow} disabled={betDisabled}>
-            Bet 1-50
-          </button>
-          <button className={s.button} onClick={betHigh} disabled={betDisabled}>
-            Bet 51-100
-          </button>
           <input
             className={s.input}
             type="number"
@@ -232,6 +225,12 @@ function App() {
             max={balance}
             onChange={(e) => setBetAmount(e.target.value)}
           />
+          <button className={s.button} onClick={betLow} disabled={betDisabled}>
+            Bet 1-50
+          </button>
+          <button className={s.button} onClick={betHigh} disabled={betDisabled}>
+            Bet 51-100
+          </button>
         </div>
         <div>
           {betDisabled && !betInvalid ? <h3>Bet amount invalid</h3> : <h3></h3>}
