@@ -68,6 +68,20 @@
   display: flex;
 }
 
+.cashier {
+  display: flex;
+  margin-top: 50px;
+  .button {
+    height: 30px;
+    width: 150px;
+  }
+}
+
+.cashierContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .spinner {
   display: inline-block;
   position: relative;

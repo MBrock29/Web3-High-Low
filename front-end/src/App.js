@@ -14,17 +14,12 @@ function App() {
   const [resultIn, setResultIn] = useState(false);
   const [outcome, setOutcome] = useState(null);
   const web3ModalRef = useRef();
+  const [account, setAccount] = useState(null);
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new ethers.providers.Web3Provider(provider);
     const signer = web3Provider.getSigner();
-    // const address = await signer.getAddress();
-    // setAddress(address);
-    // const balance = await signer.getBalance();
-    // const balanceInEth = ethers.utils.formatEther(balance);
-    // setUserBalance(balanceInEth);
-
     const { chainId } = await web3Provider.getNetwork();
     if (chainId !== 31337) {
       console.log("please change network");
@@ -39,16 +34,20 @@ function App() {
 
   const connectWallet = async () => {
     try {
-      await getProviderOrSigner();
+      setBalance(0);
+      const provider = await getProviderOrSigner(true);
+
       setWalletConnected(true);
-      getBalance();
+      const address = await provider.getAddress();
+      setAccount(address);
+      getBalance(address);
       getRandomNumber();
     } catch (err) {
       console.error(err);
     }
   };
 
-  const getBalance = async () => {
+  const getBalance = async (id) => {
     try {
       const provider = await getProviderOrSigner();
       const randomiserContract = new ethers.Contract(
@@ -57,7 +56,7 @@ function App() {
         provider
       );
       setBalance(
-        ethers.utils.formatUnits(await randomiserContract.getBalance(), 0)
+        ethers.utils.formatUnits(await randomiserContract.getBalance(id), 0)
       );
       setLoading(false);
     } catch (err) {
@@ -101,12 +100,14 @@ function App() {
       } else {
         setOutcome(true);
       }
-      await getBalance();
+      await getBalance(account);
     } catch (err) {
       console.error(err);
       setLoading(false);
     }
   };
+
+  console.log(balance);
 
   const betLow = async () => {
     try {
@@ -126,14 +127,31 @@ function App() {
       } else {
         setOutcome(false);
       }
-      await getBalance();
+      await getBalance(account);
     } catch (err) {
       console.error(err);
       setLoading(false);
     }
   };
 
-  const resetBalance = async () => {
+  // const resetBalance = async () => {
+  //   try {
+  //     const provider = await getProviderOrSigner(true);
+  //     const randomiserContract = new ethers.Contract(
+  //       randomiser_CONTRACT_ADDRESS,
+  //       abi,
+  //       provider
+  //     );
+  //     const transaction = await randomiserContract.resetBalance();
+  //     setLoading(true);
+  //     await transaction.wait();
+  //     await getBalance(account);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  const deposit = async () => {
     try {
       const provider = await getProviderOrSigner(true);
       const randomiserContract = new ethers.Contract(
@@ -141,10 +159,32 @@ function App() {
         abi,
         provider
       );
-      const transaction = await randomiserContract.resetBalance();
+      const transaction = await randomiserContract.deposit({
+        value: ethers.utils.parseUnits("0.1", "ether"),
+      });
       setLoading(true);
       await transaction.wait();
-      await getBalance();
+      await getBalance(account);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  console.log(account);
+
+  const withdraw = async () => {
+    try {
+      const provider = await getProviderOrSigner(true);
+      const randomiserContract = new ethers.Contract(
+        randomiser_CONTRACT_ADDRESS,
+        abi,
+        provider
+      );
+      const withdrawAmount = (balance * 1000000000000000).toString();
+      const transaction = await randomiserContract.withdraw(withdrawAmount);
+      setLoading(true);
+      await transaction.wait();
+      await getBalance(account);
     } catch (err) {
       console.error(err);
     }
@@ -200,9 +240,9 @@ function App() {
       </div>
       <div className={s.balanceContainer}>
         <h1>Balance: {balance}</h1>
-        <p className={s.reset} onClick={resetBalance}>
+        {/* <p className={s.reset} onClick={resetBalance}>
           Reset
-        </p>
+        </p> */}
       </div>
       <div className={s.buttonsContainer}>
         <button className={s.button} onClick={betLow} disabled={betDisabled}>
@@ -222,14 +262,24 @@ function App() {
       <div>
         {betDisabled && !betInvalid ? <h3>Bet amount invalid</h3> : <h3></h3>}
       </div>
+      <div className={s.cashierContainer}>
+        <div className={s.cashier}>
+          {" "}
+          <button className={s.button} onClick={deposit}>
+            Deposit
+          </button>
+          <button className={s.button} onClick={withdraw}>
+            Withdraw
+          </button>
+        </div>
+        <p>Deposit costs 0.1 ETH for 100 chips</p>
+      </div>
       {resultIn && (
         <div>
           <h1>
             Result is... <br />
             <span style={{ fontSize: 72 }}>{randomNumber}</span>
           </h1>
-          {/* <br />
-          <h1>{outcome ? "Congrats, you won!" : "Sorry, you lost"}</h1> */}
         </div>
       )}
     </div>

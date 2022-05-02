@@ -8,13 +8,57 @@ contract Randomiser {
     uint256 randomNumber;
     uint256 winnings;
     uint256 rand;    
+    uint256 public payoutAmount;
 
+    struct Player {
+        address walletAddress;
+        uint256 balance;
+        bool hasDeposited;
+    }
 
-    constructor() {
-      balance = 100;
-      randomNumber = 35;
+    mapping(address => Player) public players; 
 
- }
+    event Deposit(
+        address indexed userAddress,
+        uint256 weiAmount,
+        uint256 contractBalance
+    );
+
+    event Withdraw(
+        address indexed userAddress,
+        uint256 weiAmount,
+        uint256 contractBalance
+    );
+
+     address public owner;
+
+    constructor() payable {
+      balance = 0;
+      owner = msg.sender;
+    }
+
+     function deposit() public payable {
+        players[msg.sender].balance = players[msg.sender].balance + 100;
+         emit Deposit(
+             msg.sender,
+             msg.value,
+             address(this).balance
+       );
+     }
+
+     function withdraw(uint256 balanceAmount) public payable {
+         payable(msg.sender).transfer(balanceAmount);
+         players[msg.sender].balance = 0;
+        emit Withdraw(
+            msg.sender,
+            balanceAmount,
+            address(this).balance
+        );
+     }
+
+     function getIndividualPlayer(address addr) public view returns (Player memory) {
+         return players[addr];
+     }
 
 
     function betHigh(uint256 amount) public {
@@ -23,10 +67,10 @@ contract Randomiser {
         randomNumber = (rand % 100) + 1;
         if (randomNumber > 50) {
            winnings = betAmount;  
-           balance = balance + winnings;
+           players[msg.sender].balance = players[msg.sender].balance + winnings;
         }
         else {
-            balance = balance - betAmount;
+            players[msg.sender].balance = players[msg.sender].balance - betAmount;
         }
     }
 
@@ -36,23 +80,23 @@ contract Randomiser {
         randomNumber = (rand % 100) + 1;
         if (randomNumber < 51) {
            winnings = betAmount;  
-           balance = balance + winnings;
+           players[msg.sender].balance = players[msg.sender].balance + winnings;
         }
         else {
-            balance = balance - betAmount;
+            players[msg.sender].balance = players[msg.sender].balance - betAmount;
         }
     }
-    function getBalance() public view returns (uint256) {
-        return balance;
+    function getBalance(address userAddress) public view returns (uint256) {
+        return players[userAddress].balance;
     }
 
     function getRandomNumber() public view returns (uint256) {
         return randomNumber;
     }
 
-    function resetBalance() public {
-        balance = 100;
-    }
+    // function resetBalance() public {
+    //     balance = 100;
+    // }
 }
 
 
