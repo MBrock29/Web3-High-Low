@@ -16,6 +16,7 @@ function App() {
   const web3ModalRef = useRef();
   const [account, setAccount] = useState(null);
   const [wrongNetwork, setWrongNetwork] = useState(false);
+  const [result, setResult] = useState(null);
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -74,7 +75,11 @@ function App() {
         provider
       );
       const rand = await randomiserContract.getRandomNumber();
+      setBetAmount("");
       setRandomNumber(ethers.utils.formatUnits(rand, 0));
+      const outcome = await randomiserContract.getResult();
+      setResult(outcome);
+      console.log(outcome);
     } catch (err) {
       console.error(err);
     }
@@ -99,8 +104,6 @@ function App() {
       setLoading(false);
     }
   };
-
-  console.log(balance);
 
   const betLow = async () => {
     try {
@@ -131,7 +134,7 @@ function App() {
         provider
       );
       const transaction = await randomiserContract.deposit({
-        value: ethers.utils.parseUnits("0.1", "ether"),
+        value: ethers.utils.parseUnits("0.01", "ether"),
       });
       setLoading(true);
       await transaction.wait();
@@ -149,7 +152,7 @@ function App() {
         abi,
         provider
       );
-      const withdrawAmount = (balance * 1000000000000000).toString();
+      const withdrawAmount = (balance * 100000000000000).toString();
       const transaction = await randomiserContract.withdraw(withdrawAmount);
       setLoading(true);
       await transaction.wait();
@@ -158,6 +161,8 @@ function App() {
       console.error(err);
     }
   };
+
+  console.log(betAmount);
 
   const betDisabled =
     parseInt(betAmount) > parseInt(balance) || betAmount < 0.01;
@@ -244,6 +249,23 @@ function App() {
           </div>
         )}
       </div>
+      {resultIn && (
+        <div>
+          {result ? (
+            <img
+              src="https://media.giphy.com/media/l0Ex6kAKAoFRsFh6M/giphy.gif"
+              width={300}
+              height={225}
+            />
+          ) : (
+            <img
+              src="https://media.giphy.com/media/YJjvTqoRFgZaM/giphy.gif"
+              width={300}
+              height={225}
+            />
+          )}
+        </div>
+      )}
       {wrongNetwork && (
         <div>
           <h1>Network error. Please connect to Rinkeby test network.</h1>

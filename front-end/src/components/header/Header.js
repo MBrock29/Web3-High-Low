@@ -19,7 +19,7 @@ function Header({ deposit, withdraw, withdrawalAllowed, balance }) {
       >
         Withdraw
       </button>
-      <p>Deposit costs 0.1 ETH for 100 chips</p>
+      <p>Deposit costs 0.01 ETH for 100 chips</p>
     </div>
   );
 }

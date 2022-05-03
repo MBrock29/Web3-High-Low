@@ -157,6 +157,19 @@ export const abi = [
   },
   {
     inputs: [],
+    name: "getResult",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "owner",
     outputs: [
       {
@@ -225,4 +238,4 @@ export const abi = [
   },
 ];
 export const randomiser_CONTRACT_ADDRESS =
-  "0xB10d6DCF4DB7C863b583d63B9e400678F830b075";
+  "0xAA4c6aF633047bC8010dE9ce43da46f5aB4d59dF";
